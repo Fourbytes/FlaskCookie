@@ -1,4 +1,0 @@
-git+http://github.com/mitsuhiko/flask.git
-
-flask-classy
-unittest
