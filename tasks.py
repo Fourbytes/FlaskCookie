@@ -5,7 +5,7 @@ from invoke import task, run
 
 cwd = os.path.abspath(os.path.dirname(__file__))
 app_root = os.path.join(cwd, 'flaskapp')
-venv_dir = os.path.join(cwd, '.tvenv')
+venv_dir = os.path.join(cwd, '.venv')
 
 @task
 def build():
