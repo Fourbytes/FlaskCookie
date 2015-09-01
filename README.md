@@ -1,5 +1,6 @@
 # FlaskCookie
 A minimal Flask template for cookiecutter.
+![Travis CI](https://travis-ci.org/Fourbytes/FlaskCookie.svg)
 
 ## Usage
 ```
