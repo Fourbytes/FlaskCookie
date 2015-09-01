@@ -44,4 +44,3 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['sass', 'jsx']);
-gulp.task('test', ['sass', 'jsx']);
