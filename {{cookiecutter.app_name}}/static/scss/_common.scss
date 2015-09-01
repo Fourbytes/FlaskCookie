@@ -1,0 +1,21 @@
+@import '../vendor/bootstrap/scss/bootstrap-flex';
+
+$primaryColor: #ffffff;
+$secondaryColor: #6e6eff;
+
+body {
+	color: $primaryColor;
+	background-color: $secondaryColor;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	text-align: center;
+	font-size: 30px;
+	margin-top: 200px;
+}
+
+span.ip {
+	font-weight: 700;
+	font-family: "Lucida Console", Monaco, monospace;
+	background-color: $primaryColor;
+	color: $secondaryColor;
+	padding: 0 5px;
+}
