@@ -1,30 +1,24 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import os
 import shutil
 
 from invoke import task, run
 
-HERE = os.path.abspath(os.path.dirname(__file__))
-COOKIE = os.path.join(HERE, 'flaskapp')
-REQUIREMENTS = os.path.join(COOKIE, 'requirements.txt')
+cwd = os.path.abspath(os.path.dirname(__file__))
+app_root = os.path.join(cwd, 'flaskapp')
 
 @task
 def build():
-    run('cookiecutter {0} --no-input'.format(HERE))
+    run('cookiecutter {0} --no-input'.format(cwd))
 
 @task
 def clean():
-    if os.path.exists(COOKIE):
-        shutil.rmtree(COOKIE)
-        print('Removed {0}'.format(COOKIE))
+    if os.path.exists(app_root):
+        shutil.rmtree(app_root)
+        print('Removed {0}'.format(app_root))
     else:
         print('App directory does not exist. Skipping.')
 
 @task(pre=[clean, build])
 def test():
-    run('pip install -r {0}'.format(REQUIREMENTS), echo=True)
-    run('npm install', echo=True)
-    run('npm install -g gulp', echo=True)
-    run('gulp test', echo=True)
-    run('python -m unittest tests', echo=True)
+    os.chdir(app_root)
+    run('invoke -r {} test'.format(app_root), echo=True, pty=True)
