@@ -23,7 +23,8 @@ def clean():
 
 @task(pre=[clean, build])
 def test():
-    run('virtualenv -p python3 {}'.format(venv_dir))
-    run('source {}'.format(os.path.join(venv_dir, 'bin/activate')))
+    run('virtualenv -p python3 {}'.format(venv_dir), echo=True)
+    run('sh {}'.format(os.path.join(venv_dir, 'bin/activate')), echo=True)
+    run('which python', echo=True)
     os.chdir(app_root)
     run('invoke -r {} test'.format(app_root), echo=True, pty=True)
