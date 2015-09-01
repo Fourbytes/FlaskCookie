@@ -1,0 +1,18 @@
+{
+  "name": "flaskapp",
+  "version": "0.0.1 ",
+  "authors": [
+    "Oscar Rainford <oscar@fourbytes.me>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha"
+  }
+}

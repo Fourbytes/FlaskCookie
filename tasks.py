@@ -24,4 +24,7 @@ def clean():
 @task(pre=[clean, build])
 def test():
     run('pip install -r {0}'.format(REQUIREMENTS), echo=True)
-    run('python {0} test'.format(os.path.join(COOKIE, 'manage.py')), echo=True)
+    run('npm install', echo=True)
+    run('npm install -g gulp', echo=True)
+    run('gulp test', echo=True)
+    run('python -m unittest tests', echo=True)
