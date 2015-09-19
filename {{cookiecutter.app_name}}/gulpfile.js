@@ -8,6 +8,7 @@ var cache = require('gulp-cached')
 var duration = require('gulp-duration');
 var bower = require('gulp-bower');
 var sourcemaps = require('gulp-sourcemaps');
+var gulpif = require('gulp-if');
  
 gulp.task('bower', function() {
   return bower()
@@ -28,7 +29,7 @@ gulp.task('jsx', function() {
 // Task configuration
 gulp.task('sass', function() {
   gulp.src('{{cookiecutter.app_name}}/static/scss/*.scss')
-  .pipe(cache('sass'))
+  .pipe(gulpif(global.isWatching, cache('sass')))
   .pipe(sassInheritance({dir: '{{cookiecutter.app_name}}/static/scss/'}))
   .pipe(sourcemaps.init())
   .pipe(sass().on('error', sass.logError))
@@ -38,7 +39,11 @@ gulp.task('sass', function() {
   .pipe(gulp.dest('{{cookiecutter.app_name}}/static/dist/css/'));
 });
 
-gulp.task('watch', function() {
+gulp.task('setWatch', function() {
+    global.isWatching = true;
+});
+
+gulp.task('watch', ['setWatch', 'sass', 'jsx'], function() {
   gulp.watch('{{cookiecutter.app_name}}/static/scss/*.scss', ['sass']);
   gulp.watch('{{cookiecutter.app_name}}/static/jsx/*.jsx', ['jsx']);
 });
