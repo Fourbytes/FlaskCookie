@@ -9,6 +9,17 @@ var duration = require('gulp-duration');
 var bower = require('gulp-bower');
 var sourcemaps = require('gulp-sourcemaps');
 var gulpif = require('gulp-if');
+var debug = require('gulp-debug');
+var rename = require('gulp-rename');
+var path = require('path');
+
+
+function renameDist(p) {
+  p.dirname = path.join(p.dirname, "../dist/");
+  if (p.extname == ".css" || p.extname == ".js") {
+    p.dirname = path.join(p.dirname, p.extname.substring(1));
+  }
+}
  
 gulp.task('bower', function() {
   return bower()
@@ -16,56 +27,58 @@ gulp.task('bower', function() {
 });
 
 gulp.task('global_jsx', function() {
-  gulp.src('application/static/jsx/*.jsx')
+  gulp.src('application/static/jsx/*.jsx', {base: './'})
   .pipe(cache('jsx'))
   .pipe(sourcemaps.init())
   .pipe(babel())
-  .pipe(sourcemaps.write('./maps'))
-  .pipe(duration('Execution Time: '))
-  .pipe(gulp.dest('application/static/dist/js/'));
+  .pipe(rename(renameDist))
+  .pipe(sourcemaps.write('.'))
+  .pipe(debug({title: 'global_jsx'}))
+  .pipe(gulp.dest('.'));
 });
 
-gulp.task('global_sass', function() {
-  gulp.src('application/static/scss/*.scss')
-  .pipe(gulpif(global.isWatching, cache('sass')))
-  .pipe(sassInheritance({dir: 'application/static/scss/'}))
+gulp.task('global_scss', function() {
+  gulp.src(['application/static/scss/*.scss'], {base: './'})
+  .pipe(gulpif(global.isWatching, cache('scss')))
   .pipe(sourcemaps.init())
   .pipe(sass().on('error', sass.logError))
   .pipe(minifyCss({compatibility: 'ie8'}))
-  .pipe(sourcemaps.write('./maps'))
-  .pipe(duration('Execution Time: '))
-  .pipe(gulp.dest('application/static/dist/css/'));
+  .pipe(rename(renameDist))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('.'))
+  .pipe(debug({title: 'global_scss', minimal: false}));
 });
 
 gulp.task('module_jsx', function() {
-  gulp.src('application/modules/*/static/jsx/*.jsx', { base: "." })
+  gulp.src('application/modules/*/static/jsx/*.jsx', {base: './'})
   .pipe(cache('jsx'))
   .pipe(sourcemaps.init())
   .pipe(babel())
-  .pipe(sourcemaps.write('../dist/js/maps'))
-  .pipe(duration('Execution Time: '))
-  .pipe(gulp.dest('../dist/js/'));
+  .pipe(rename(renameDist))
+  .pipe(sourcemaps.write('.'))
+  .pipe(debug({title: 'module_jsx'}))
+  .pipe(gulp.dest('.'));
 });
 
-gulp.task('module_sass', function() {
-  gulp.src('application/modules/*/static/scss/*.scss', { base: "." })
-  .pipe(gulpif(global.isWatching, cache('sass')))
-  .pipe(sassInheritance({dir: 'application/static/scss/'}))
+gulp.task('module_scss', function() {
+  gulp.src('application/modules/*/static/scss/*.scss', {base: './'})
+  .pipe(gulpif(global.isWatching, cache('scss')))
   .pipe(sourcemaps.init())
   .pipe(sass().on('error', sass.logError))
   .pipe(minifyCss({compatibility: 'ie8'}))
-  .pipe(sourcemaps.write('../dist/css/maps'))
-  .pipe(duration('Execution Time: '))
-  .pipe(gulp.dest('../dist/css/'));
+  .pipe(rename(renameDist))
+  .pipe(sourcemaps.write('.'))
+  .pipe(debug({title: 'module_scss'}))
+  .pipe(gulp.dest('.'));
 });
 
 gulp.task('setWatch', function() {
     global.isWatching = true;
 });
 
-gulp.task('watch', ['setWatch', 'sass', 'jsx'], function() {
-  gulp.watch('{{cookiecutter.app_name}}/static/scss/*.scss', ['sass']);
-  gulp.watch('{{cookiecutter.app_name}}/static/jsx/*.jsx', ['jsx']);
+gulp.task('watch', ['default', 'setWatch'], function() {
+  gulp.watch('application/static/scss/*.scss', ['global_scss']);
+  gulp.watch('application/static/jsx/*.jsx', ['global_jsx']);
 });
 
-gulp.task('default', ['sass', 'jsx']);
+gulp.task('default', ['global_scss', 'global_jsx', 'module_scss', 'module_jsx']);

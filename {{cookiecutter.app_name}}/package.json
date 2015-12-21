@@ -16,6 +16,7 @@
     "gulp-sass": "^2.0.4",
     "gulp-sass-inheritance": "^0.5.1",
     "gulp-sourcemaps": "^1.5.2",
-    "gulp-if": "^1.2.5"
+    "gulp-if": "^1.2.5",
+    "gulp-rename": "^1.2.2"
   }
 }
