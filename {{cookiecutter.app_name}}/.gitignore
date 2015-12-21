@@ -1,8 +1,8 @@
 *.pyc
 __pycache__
 
-bower_components/
-node_modules/
-
-{{cookiecutter.app_name}}/.venv/
-#{{cookiecutter.app_name}}/static/
+/bower_components/
+/node_modules/
+/logs/
+.venv/
+/instance/

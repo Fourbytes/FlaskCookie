@@ -2,6 +2,7 @@
     "full_name": "Oscar Rainford",
     "email": "oscar@fourbytes.me",
     "app_name": "flaskapp",
+    "sentry_dsn": "",
     "version": "0.0.1",
     "license": "MIT"
 }

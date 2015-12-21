@@ -12,31 +12,51 @@ var gulpif = require('gulp-if');
  
 gulp.task('bower', function() {
   return bower()
-    .pipe(gulp.dest('{{cookiecutter.app_name}}/static/vendor/'))
+    .pipe(gulp.dest('application/static/vendor/'))
 });
 
-// Task configuration
-gulp.task('jsx', function() {
-  gulp.src('{{cookiecutter.app_name}}/static/jsx/*.jsx')
+gulp.task('global_jsx', function() {
+  gulp.src('application/static/jsx/*.jsx')
   .pipe(cache('jsx'))
   .pipe(sourcemaps.init())
   .pipe(babel())
   .pipe(sourcemaps.write('./maps'))
   .pipe(duration('Execution Time: '))
-  .pipe(gulp.dest('{{cookiecutter.app_name}}/static/dist/js/'));
+  .pipe(gulp.dest('application/static/dist/js/'));
 });
 
-// Task configuration
-gulp.task('sass', function() {
-  gulp.src('{{cookiecutter.app_name}}/static/scss/*.scss')
+gulp.task('global_sass', function() {
+  gulp.src('application/static/scss/*.scss')
   .pipe(gulpif(global.isWatching, cache('sass')))
-  .pipe(sassInheritance({dir: '{{cookiecutter.app_name}}/static/scss/'}))
+  .pipe(sassInheritance({dir: 'application/static/scss/'}))
   .pipe(sourcemaps.init())
   .pipe(sass().on('error', sass.logError))
   .pipe(minifyCss({compatibility: 'ie8'}))
   .pipe(sourcemaps.write('./maps'))
   .pipe(duration('Execution Time: '))
-  .pipe(gulp.dest('{{cookiecutter.app_name}}/static/dist/css/'));
+  .pipe(gulp.dest('application/static/dist/css/'));
+});
+
+gulp.task('module_jsx', function() {
+  gulp.src('application/modules/*/static/jsx/*.jsx', { base: "." })
+  .pipe(cache('jsx'))
+  .pipe(sourcemaps.init())
+  .pipe(babel())
+  .pipe(sourcemaps.write('../dist/js/maps'))
+  .pipe(duration('Execution Time: '))
+  .pipe(gulp.dest('../dist/js/'));
+});
+
+gulp.task('module_sass', function() {
+  gulp.src('application/modules/*/static/scss/*.scss', { base: "." })
+  .pipe(gulpif(global.isWatching, cache('sass')))
+  .pipe(sassInheritance({dir: 'application/static/scss/'}))
+  .pipe(sourcemaps.init())
+  .pipe(sass().on('error', sass.logError))
+  .pipe(minifyCss({compatibility: 'ie8'}))
+  .pipe(sourcemaps.write('../dist/css/maps'))
+  .pipe(duration('Execution Time: '))
+  .pipe(gulp.dest('../dist/css/'));
 });
 
 gulp.task('setWatch', function() {

@@ -2,12 +2,12 @@ import unittest
 import tempfile
 import os
 
-from {{cookiecutter.app_name}} import app, db
+from webapp import app, db
 
 
 class BasicTestCase(unittest.TestCase):
+
     def setUp(self):
-        app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
         self.app = app.test_client()
         db.create_all()
 

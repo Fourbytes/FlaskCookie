@@ -1,4 +1,5 @@
 git+http://github.com/mitsuhiko/flask.git
 flask-classy
 flask-sqlalchemy
+flask-socketio
 invoke

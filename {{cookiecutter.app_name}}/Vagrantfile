@@ -1,0 +1,32 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure(2) do |config|
+  config.ssh.forward_agent = true
+
+  config.vm.box = "debian/jessie64"
+
+  config.vm.network "forwarded_port", guest: 8000, host: 8000
+
+  config.vm.synced_folder "./", "/srv/{{cookiecutter.app_name}}"
+  config.vm.synced_folder "salt/states/", "/srv/salt/"
+
+  config.vm.provision :salt do |salt|
+    salt.minion_config = "salt/minion"
+    salt.run_highstate = true
+    salt.colorize = true
+    #salt.verbose = true
+    #salt.log_level = 'info'
+    salt.bootstrap_options = '-F -c /tmp/ -P'
+  end
+
+  #config.vm.provision :chef_solo do |chef|
+  #  chef.cookbooks_path = "chef/cookbooks"
+  #  chef.data_bags_path = "chef/data_bags"
+  #  chef.add_recipe "configure"
+  #end
+end
